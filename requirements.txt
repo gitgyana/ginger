@@ -1,0 +1,6 @@
+# pip install -r requirements.txt
+
+flask
+ibm_watson
+ibm_cloud_sdk_core
+pymongo

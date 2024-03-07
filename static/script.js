@@ -65,9 +65,14 @@ function clearChat() {
 }
 
 function startNewSession() {
-  fetch('/new_session', {
-      method: 'GET'
-  });
+    fetch('/new_session', {
+        method: "GET",
+    })
+    .then(response => response.json())
+    .then(data => {
+        const assistantMessage = data.output.generic[0].text;
+        appendMessage(assistantMessage, "incoming");
+    });
 }
 
 
