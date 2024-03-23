@@ -10,8 +10,8 @@ app = Flask(__name__)
 
 # MongoDB setup
 collection = MongoClient(mongodb_url)
-db = collection['GingerV5']
-messages_collection = db['test1']
+db = collection['GingerMessages']
+messages_collection = None
 
 # Authenticate and connect with IBM Watsonx.ai
 authenticator = IAMAuthenticator(api_key)
@@ -24,13 +24,16 @@ assistant.set_service_url(assistant_url)
 # Store session ID
 session_id = None
 
-# Create session ID
 def create_session():
     session_response = assistant.create_session(
         assistant_id=assistant_id
     )
-    global session_id
+    global session_id, messages_collection
+
+    # Create session ID
     session_id = session_response.get_result()['session_id']
+    # Create collection
+    messages_collection = db[f'session{session_id}']
 
 # Root Directory [Home Page]
 @app.route('/')
@@ -79,4 +82,4 @@ def new_session():
 
 # Run flask application
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False,host='0.0.0.0')
